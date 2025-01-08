@@ -10,7 +10,8 @@ router_module_1 = Router()
 keyboard = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text='Лекции', callback_data='Лекции1'),
     InlineKeyboardButton(text='Материал лаб. работ', callback_data='Материал лаб. работ1')],
-    [InlineKeyboardButton(text='Тест', url='https://www.vyatsu.ru/')],
+    [InlineKeyboardButton(text='Тест', url='https://e.vyatsu.ru/mod/quiz/view.php?id=771800'),
+    InlineKeyboardButton(text='Ответы', callback_data='Ответы1')],
     [InlineKeyboardButton(text='Файл со всеми материалами', callback_data='Файл со всеми материалами1')],
     [InlineKeyboardButton(text='Меню', callback_data='Меню')]
     ])
@@ -27,15 +28,13 @@ async def module_1(callback: CallbackQuery):
 @router_module_1.callback_query(F.data == 'Файл со всеми материалами1')
 async def file_1(callback: CallbackQuery):
     await update_BD(callback, "Файл со всеми материалами1")
-    await callback.answer("В разработке", show_alert=True)
-    return
     try:
         await callback.message.delete()
     except:
         pass
     finally:
         await callback.message.answer("Подождите, файл загружается")
-        await callback.message.answer_document(document="BQACAgIAAxkBAAJ-P2T_damrDjh6J3kKqJL8Hdii0KR-AALNOQACunMBSAMv4wvs7V9eMAQ")
+        await callback.message.answer_document(document="BQACAgIAAxkBAAPjZ00vrfzeN44v5ado5l4_5Hpg2SkAAsZjAAIuT2hKPz9FRYqtbg02BA")
         await callback.message.answer("Модуль 1", reply_markup=keyboard)
         await callback.answer()
 
@@ -194,4 +193,18 @@ async def lab_13(callback: CallbackQuery):
     finally:
         await callback.message.answer_document(document="BQACAgIAAxkBAANbZ0GroLaLZh4usTFw08owx_EwJ1gAAphkAALOyghKXu6jFE8scNo2BA")
         await callback.message.answer("Раздел лабораторных работ 1 модуля", reply_markup=keyboard_labs)
+        await callback.answer()
+
+
+@router_module_1.callback_query(F.data == 'Ответы1')
+async def lab_13(callback: CallbackQuery):
+    await update_BD(callback, "Ответы1")
+    try:
+        await callback.message.delete()
+    except:
+        pass
+    finally:
+        await callback.message.answer("Подождите, файл загружается")
+        await callback.message.answer_document(document="BQACAgIAAxkBAAPxZ1Gp0M1QwH_KGlrsz7STgz5j0gMAAhVcAAKJZJBKNwKDsfNp2uA2BA")
+        await callback.message.answer("Модуль 1", reply_markup=keyboard)
         await callback.answer()
