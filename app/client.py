@@ -38,10 +38,15 @@ data = {
         'test': 'https://e.vyatsu.ru/mod/quiz/view.php?id=783180',
         'schedule': 'https://docs.google.com/spreadsheets/d/1poW72yxJLRbpGNV-A5KWB5rFLnkbLlkHhKBjXMwn7v4/edit?gid=0#gid=0',
     },
+    '3': {
+        'message_text': '3 модуль - Анализ данных\nhttps://e.vyatsu.ru/course/view.php?id=33700',
+        'test': 'https://e.vyatsu.ru/course/view.php?id=33700&sectionid=2691200',
+        'schedule': '',
+    },
 }
 
 def create_module_keyboard(args=''):
-    pattern = r"^module_[1-2]$"
+    pattern = r"^module_[1-3]$"
     if not re.match(pattern, args):
         keyboard = InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text='1 модуль', callback_data='1 модуль'),
@@ -103,4 +108,7 @@ async def menu_handler(callback: CallbackQuery):
 
 @router_client.callback_query(F.data == 'Ассесмент')
 async def assesment_handler(callback: CallbackQuery):
-    await callback.answer("С 17 февраля...", show_alert=True)
+    await callback.message.answer_document(document='BQACAgIAAxkBAAIBdme134PbJysnSQkdYouvM3dnk_c8AAIxawACmT-wSf01bLvr5u_GNgQ', caption='https://auth.unionepro.ru/login')
+    keyboard, message_text = create_module_keyboard()
+    await callback.message.answer(MODULES_DESCRIPTION, reply_markup=keyboard)
+    await callback.answer()
