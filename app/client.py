@@ -14,6 +14,10 @@ from typing import Callable, Awaitable, Dict, Any
 
 from dbrequests import update_db
 
+from app.module_1 import send_module_1
+from app.module_2 import send_module_2
+from app.module_3 import send_module_3
+
 router_client = Router()
 
 MODULES_DESCRIPTION = """Курс-хаб: https://e.vyatsu.ru/course/view.php?id=31976
@@ -27,88 +31,58 @@ MODULES_DESCRIPTION = """Курс-хаб: https://e.vyatsu.ru/course/view.php?id
 7 модуль - Работа со структурированными данными
 8 модуль - Практика в профильной сфере"""
 
-data = {
-    '1': {
-        'message_text': '1 модуль - Принципы функционирования нейронных сетей\nhttps://e.vyatsu.ru/course/view.php?id=33681',
-        'test': 'https://e.vyatsu.ru/mod/quiz/view.php?id=771800',
-        'schedule': '',
-    },
-    '2': {
-        'message_text': '2 модуль - Генеративный искусственный интеллект\nhttps://e.vyatsu.ru/course/view.php?id=33699',
-        'test': 'https://e.vyatsu.ru/mod/quiz/view.php?id=783180',
-        'schedule': 'https://docs.google.com/spreadsheets/d/1poW72yxJLRbpGNV-A5KWB5rFLnkbLlkHhKBjXMwn7v4/edit?gid=0#gid=0',
-    },
-    '3': {
-        'message_text': '3 модуль - Анализ данных\nhttps://e.vyatsu.ru/course/view.php?id=33700',
-        'test': 'https://e.vyatsu.ru/course/view.php?id=33700&sectionid=2691200',
-        'schedule': '',
-    },
-}
+KEYBOARD = InlineKeyboardMarkup(inline_keyboard=[
+    [InlineKeyboardButton(text='1 модуль', callback_data='1 модуль'),
+        InlineKeyboardButton(text='2 модуль', callback_data='2 модуль'),
+        InlineKeyboardButton(text='3 модуль', callback_data='3 модуль'),
+        InlineKeyboardButton(text='4 модуль', callback_data='4 модуль')],
 
-def create_module_keyboard(args=''):
-    pattern = r"^module_[1-3]$"
-    if not re.match(pattern, args):
-        keyboard = InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text='1 модуль', callback_data='1 модуль'),
-             InlineKeyboardButton(text='2 модуль', callback_data='2 модуль'),
-             InlineKeyboardButton(text='3 модуль', callback_data='3 модуль'),
-             InlineKeyboardButton(text='4 модуль', callback_data='4 модуль')],
+    [InlineKeyboardButton(text='5 модуль', callback_data='5 модуль'),
+        InlineKeyboardButton(text='6 модуль', callback_data='6 модуль'),
+        InlineKeyboardButton(text='7 модуль', callback_data='7 модуль'),
+        InlineKeyboardButton(text='8 модуль', callback_data='8 модуль')],
 
-            [InlineKeyboardButton(text='5 модуль', callback_data='5 модуль'),
-             InlineKeyboardButton(text='6 модуль', callback_data='6 модуль'),
-             InlineKeyboardButton(text='7 модуль', callback_data='7 модуль'),
-             InlineKeyboardButton(text='8 модуль', callback_data='8 модуль')],
-
-            [InlineKeyboardButton(text='Ассесмент', callback_data='Ассесмент')]
-        ])
-        message_text = MODULES_DESCRIPTION
-    else:
-        n = args[-1]
-        inline_keyboard = [
-            [InlineKeyboardButton(text='Лекции', callback_data=f'Лекции{n}'),
-             InlineKeyboardButton(text='Материал лаб. работ', callback_data=f'Материал лаб. работ{n}')],
-
-            [InlineKeyboardButton(text='Материалы сам. работ', callback_data=f'Материалы сам. работ{n}'),
-             InlineKeyboardButton(text='Доп. материал', callback_data=f'Доп. материал{n}')],
-
-            [InlineKeyboardButton(text='Файл с материалами', callback_data=f'Файл с материалами{n}'),
-             InlineKeyboardButton(text='Тестирование', url=data[n]['test'])],
-        ]
-        if data[n]['schedule']:
-            inline_keyboard.append([InlineKeyboardButton(text='Расписание', url=data[n]['schedule'])]),
-        
-        inline_keyboard.append([InlineKeyboardButton(text='Выбор модуля', callback_data='Меню')])
-        
-        message_text = data[n]['message_text']
-        
-        keyboard = InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
-    return keyboard, message_text
-
-
-async def send_or_edit_modules_message(message, keyboard, message_text=MODULES_DESCRIPTION):
-    if isinstance(message, Message):
-        await message.answer(message_text, reply_markup=keyboard)
-    elif isinstance(message, CallbackQuery):
-        await message.message.edit_text(message_text, reply_markup=keyboard)
-        await message.answer()
+    [InlineKeyboardButton(text='Ассесмент', callback_data='Ассесмент')]
+])
 
 
 @router_client.message(CommandStart())
 async def start_handler(message: Message, command):
     args = command.args if command.args else ''
-    keyboard, message_text = create_module_keyboard(args)
-    await send_or_edit_modules_message(message, keyboard, message_text)
+    if not args:
+        await message.answer(MODULES_DESCRIPTION, reply_markup=KEYBOARD)
+    else:
+        pattern = r"^module_[1-3]$"
+        if not re.match(pattern, args):
+            await message.answer(MODULES_DESCRIPTION, reply_markup=KEYBOARD)
+        else:
+            match int(args[-1]):
+                case 1:
+                    await send_module_1(message)
+                case 2:
+                    await send_module_2(message)
+                case 3:
+                    await send_module_3(message)
+                # case 4:
+                #     await module_4(message)
+                # case 5:
+                #     await module_5(message)
+                # case 6:
+                #     await module_6(message)
+                # case 7:
+                #     await module_7(message)
+                # case 8:
+                #     await module_8(message)
 
 
 @router_client.callback_query(F.data == 'Меню')
 async def menu_handler(callback: CallbackQuery):
-    keyboard, message_text = create_module_keyboard()
-    await send_or_edit_modules_message(callback, keyboard)
+    await callback.message.edit_text(MODULES_DESCRIPTION, reply_markup=KEYBOARD)
+    await callback.answer()
 
 
 @router_client.callback_query(F.data == 'Ассесмент')
 async def assesment_handler(callback: CallbackQuery):
     await callback.message.answer_document(document='BQACAgIAAxkBAAIBdme134PbJysnSQkdYouvM3dnk_c8AAIxawACmT-wSf01bLvr5u_GNgQ', caption='https://auth.unionepro.ru/login')
-    keyboard, message_text = create_module_keyboard()
-    await callback.message.answer(MODULES_DESCRIPTION, reply_markup=keyboard)
+    await callback.message.answer(MODULES_DESCRIPTION, reply_markup=KEYBOARD)
     await callback.answer()

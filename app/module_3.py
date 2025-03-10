@@ -1,5 +1,5 @@
 from aiogram import Router, F
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery, Message
 
 router_module_3 = Router()
 
@@ -11,7 +11,9 @@ keyboard = InlineKeyboardMarkup(inline_keyboard=[
      InlineKeyboardButton(text='Доп. материал', callback_data='Доп. материал3')],
 
     [InlineKeyboardButton(text='Файл с материалами', callback_data='Файл с материалами3'),
-     InlineKeyboardButton(text='Тестирование', url='https://e.vyatsu.ru/course/view.php?id=33700&sectionid=2691200')],
+     InlineKeyboardButton(text='Тестирование', url='https://e.vyatsu.ru/mod/quiz/view.php?id=787532')],
+
+    [InlineKeyboardButton(text='Расписание', url='https://docs.google.com/spreadsheets/d/1hYUDXCIwWiOfZ3XAz9oZS9HOVTO0yoTtW6r6WaIqIfc/edit')],
 
     [InlineKeyboardButton(text='Выбор модуля', callback_data='Меню')],
 ])
@@ -19,21 +21,24 @@ keyboard = InlineKeyboardMarkup(inline_keyboard=[
 message_text = '3 модуль - Анализ данных\nhttps://e.vyatsu.ru/course/view.php?id=33700'
 
 
+async def send_module_3(message: Message):
+    await message.answer(message_text, reply_markup=keyboard)
+
+
 @router_module_3.callback_query(F.data == '3 модуль')
 async def module_3(callback: CallbackQuery):
     await callback.message.edit_text(message_text, reply_markup=keyboard)
     await callback.answer()
 
+
 @router_module_3.callback_query(F.data == 'Файл с материалами3')
 async def file_3(callback: CallbackQuery):
-    await callback.answer("В разработке", show_alert=True)
-    return
     try:
         await callback.message.delete()
     except:
         pass
     finally:
-        await callback.message.answer_document(document='BQACAgIAAxkBAAIBHWeu1i73L7-Sxx_JJmWkj1deqeFXAAJ5XwACdx14Se3vpJ7unqV3NgQ')
+        await callback.message.answer_document(document='BQACAgIAAxkBAAIB1mfO_E-SQPCn9bftboRQCZ163CPLAAK2cQACBqV4Sk0sMY8ttLxFNgQ')
         await callback.message.answer(message_text, reply_markup=keyboard)
         await callback.answer()
 
@@ -84,20 +89,17 @@ async def material_3(callback: CallbackQuery):
         number = int(callback.data[-1])
         match number:
             case 1:
-                await callback.message.answer_document(document='BQACAgIAAxkBAAOaZ6Da3TeARc33k_c38Xl7ElrYCdgAAqJlAAIO_AlJQ1sVaq8Gv_k3BA')
-                await callback.message.answer_document(document='BQACAgIAAxkBAAOcZ6Da3F5rqn1ZGFcAAakuHAnQR1kUAAKjZQACDvwJSRWmye03VtW3NgQ')
+                await callback.message.answer_document(document='BQACAgIAAxkBAAIB2GfO_I4jgmzwojSLMBGhm9UNJoGoAAK8cQACBqV4SsgmdH0wflERNgQ')
+                await callback.message.answer_document(document='BQACAgIAAxkBAAIB2mfO_JHxXvJ875lpkfx1fuaAaQvQAAK9cQACBqV4SmE_66pFwKXSNgQ')
             case 2:
-                await callback.message.answer_document(document='BQACAgIAAxkBAAOeZ6DbAVB_XSg_QVgAAeCYrVpHk8noAAKqZQACDvwJSfbqTtv0jtT6NgQ')
-                await callback.message.answer_document(document='BQACAgIAAxkBAAOgZ6DbBwmNOFsskBr0frZ4I-GOugEAAqtlAAIO_AlJcPuosiEjjg43BA')
+                await callback.message.answer_document(document='BQACAgIAAxkBAAIB3GfO_K1zvZhYzw_AHKzHRHnfkPNiAALAcQACBqV4SmG-vD7pEdlnNgQ')
             case 3:
-                await callback.message.answer_document(document='BQACAgIAAxkBAAOkZ6DbSq39oc8kxUvjW4g33j7yZh0AArRlAAIO_AlJKd4mtgVEwcM3BA')
-                await callback.message.answer_document(document='BQACAgIAAxkBAAOiZ6DbRxkQ8TwtGa-jSrQFZmgBtvwAArNlAAIO_AlJZeh7Hozupgw3BA')
+                await callback.message.answer_document(document='BQACAgIAAxkBAAIB3mfO_NWNXiJK9POw0TVWGcXlFd5-AALDcQACBqV4SlAu10zUc14RNgQ')
             case 4:
-                await callback.message.answer_document(document='BQACAgIAAxkBAAOmZ6DbcpzHSqvmK6v65eekm-I73Z4AArllAAIO_AlJQdq8w74rrkA3BA')
-                await callback.message.answer_document(document='BQACAgIAAxkBAAOoZ6DbdWqSGHoCKWLJLJCzP4EGYAADumUAAg78CUm4BdhUIp6DEjYE')
+                await callback.message.answer_document(document='BQACAgIAAxkBAAIB4GfO_PIpYKf7_kzJh7Ack48ZoxG5AALEcQACBqV4SjtQmgABcD9AujYE')
             case 5:
-                await callback.message.answer_document(document='BQACAgIAAxkBAAOqZ6DblDzB0hmxrhzgYrRBoPt3vRUAAr1lAAIO_AlJ3wVG3mMhYpQ3BA')
-                await callback.message.answer_document(document='BQACAgIAAxkBAAOsZ6DbltGNT8tGTe5blaTYZdDR6XcAAr5lAAIO_AlJgyfPIItt9qk3BA')
+                await callback.message.answer_document(document='BQACAgIAAxkBAAIB4mfO_RfAlUJfUFmlI5LAYWX4uOsrAALIcQACBqV4SvMQeQI5C6M2NgQ')
+                await callback.message.answer_document(document='BQACAgIAAxkBAAIB5GfO_RqWeLQ_3gFCAAEMQQhym0vwZwACyXEAAgaleEqtUqPclkd9rjYE')
 
         await callback.message.answer('Раздел лекций 3 модуля', reply_markup=keyboard_lecture)
         await callback.answer()
@@ -139,11 +141,17 @@ async def lab_3(callback: CallbackQuery):
         number = int(callback.data[-1])
         match number:
             case 1:
-                await callback.message.answer_document(document='BQACAgIAAxkBAAOuZ6DcCL56koCMej5TPuHDL7tQoLUAAtVlAAIO_AlJwI-3nlas_3U3BA')
+                await callback.message.answer_document(document='BQACAgIAAxkBAAIB5mfO_W_VM9EnhA4BcYoCJ8Mo7ZWHAALQcQACBqV4SvQtkPDMdwkrNgQ')
+                await callback.message.answer_document(document='BQACAgIAAxkBAAIB7WfO_YqOneaLTRyUkcUt4Oa2NDe_AALYcQACBqV4SnB3Ht5akhd_NgQ')
+                await callback.message.answer_document(document='BQACAgIAAxkBAAIB7GfO_YppgmqKKxt_eVQGaim-WRjUAALWcQACBqV4Si7Vogb6us0QNgQ')
+                await callback.message.answer_document(document='BQACAgIAAxkBAAIB6GfO_YqiJyHVm3Hkv6uRHjVXn5p3AALTcQACBqV4Sj84lDioavUoNgQ')
+                await callback.message.answer_document(document='BQACAgIAAxkBAAIB6mfO_Yrf6PDdH8bJJnkVmmWm-u5IAALVcQACBqV4Spo8jOT0ProINgQ')
+                await callback.message.answer_document(document='BQACAgIAAxkBAAIB6WfO_Yo5jfOYzkNwoLuTHzDE2tkbAALScQACBqV4SvwCD2nEPSlMNgQ')
+                await callback.message.answer_document(document='BQACAgIAAxkBAAIB62fO_Yo-8a1o0tK0aNPzLqkgqz-hAALXcQACBqV4SvCsJpMOoKi6NgQ')
+            case 2:
+                await callback.message.answer_document(document='BQACAgIAAxkBAAIB9GfO_eBIHPSlS2yndF2zt62Sfhz3AALlcQACBqV4SoUiX0MEIy6xNgQ')
             case 3:
-                await callback.message.answer_document(document='BQACAgIAAxkBAAOwZ6DcIO0B81W43R3sr4N3kSzCW8oAAthlAAIO_AlJrwAB1VFPQa3BNgQ')
-            case 3:
-                await callback.message.answer_document(document='BQACAgIAAxkBAAOyZ6DcNMWYaZye5wj33TjmRiD_BPMAAttlAAIO_AlJV0ftgb-Y9Cs3BA')
+                await callback.message.answer_document(document='BQACAgIAAxkBAAIB-GfO_gABCg-bsFe9JFFk3Jut9nn8OQAC6XEAAgaleEoG8HUvWGgMsDYE')
         await callback.message.answer('Раздел лабораторных работ 3 модуля', reply_markup=keyboard_labs)
         await callback.answer()
 

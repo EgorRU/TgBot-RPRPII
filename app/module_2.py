@@ -1,5 +1,5 @@
 from aiogram import Router, F
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery, Message
 
 router_module_2 = Router()
 
@@ -13,18 +13,21 @@ keyboard = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text='Файл с материалами', callback_data='Файл с материалами2'),
      InlineKeyboardButton(text='Тестирование', url='https://e.vyatsu.ru/mod/quiz/view.php?id=783180')],
 
-    [InlineKeyboardButton(text='Расписание', url='https://docs.google.com/spreadsheets/d/1poW72yxJLRbpGNV-A5KWB5rFLnkbLlkHhKBjXMwn7v4/edit?gid=0#gid=0')],
-
     [InlineKeyboardButton(text='Выбор модуля', callback_data='Меню')],
 ])
 
 message_text = '2 модуль - Генеративный искусственный интеллект\nhttps://e.vyatsu.ru/course/view.php?id=33699'
 
 
+async def send_module_2(message: Message):
+    await message.answer(message_text, reply_markup=keyboard)
+
+
 @router_module_2.callback_query(F.data == '2 модуль')
 async def module_2(callback: CallbackQuery):
     await callback.message.edit_text(message_text, reply_markup=keyboard)
     await callback.answer()
+
 
 @router_module_2.callback_query(F.data == 'Файл с материалами2')
 async def file_2(callback: CallbackQuery):

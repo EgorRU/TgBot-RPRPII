@@ -1,5 +1,5 @@
 from aiogram import Router, F
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery, Message
 
 router_module_1 = Router()
 
@@ -17,6 +17,10 @@ keyboard = InlineKeyboardMarkup(inline_keyboard=[
 ])
 
 message_text = '1 модуль - Принципы функционирования нейронных сетей\nhttps://e.vyatsu.ru/course/view.php?id=33681'
+
+
+async def send_module_1(message: Message):
+    await message.answer(message_text, reply_markup=keyboard)
 
 
 @router_module_1.callback_query(F.data == '1 модуль')
